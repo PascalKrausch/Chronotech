@@ -1,65 +1,78 @@
-import Image from "next/image";
+import { prisma } from "@/lib/prisma"; 
+import Link from "next/link";
+import Hero from "./components/Hero";
+import Button from "./components/ui/Button";
 
-export default function Home() {
+
+export const dynamic = "force-dynamic"; // Neuer Datenbankzugriff bei neuladen
+
+export default function HomePage() { // Umbenannt von LandingPage und jetzt die Root-Seite
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="min-h-screen bg-stone-100 text-stone-900">
+      {/* Hero Section */}
+      <Hero />
+
+      {/* About Section */}
+      <section className="max-w-4xl mx-auto p-8 bg-white rounded-lg shadow-md my-8">
+        <h2 className="text-3xl font-bold text-stone-800 mb-4">Willkommen bei Chronotech!</h2>
+        <p className="text-lg text-stone-700 leading-relaxed mb-4">
+          Chronotech ist dein zentraler Treffpunkt für alle, die sich für Technikgeschichte, innovative Projekte und die Zukunft der Technologie begeistern. Tauche ein in spannende Artikel, diskutiere mit Gleichgesinnten und teile dein Wissen in unserer wachsenden Community.
+        </p>
+        <p className="text-lg text-stone-700 leading-relaxed">
+          Egal, ob du ein erfahrener Experte bist oder gerade erst deine Reise in die Welt der Technik beginnst – hier findest du Inspiration, Austausch und neue Perspektiven.
+        </p>
+        <div className="mt-6 flex gap-4">
+          <Link href="/articles/new">
+            <Button>
+              Artikel schreiben
+            </Button>
+          </Link>
+          <Link href="/articles"> {/* Link zur neuen Artikelübersichtsseite */}
+            <Button variant="primary">
+              Alle Artikel ansehen
+            </Button>
+          </Link>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </section>
+
+      {/* Developer Roadmap Section */}
+      <section className="max-w-4xl mx-auto p-8 bg-white rounded-lg shadow-md my-8">
+        <h2 className="text-3xl font-bold text-stone-800 mb-4">Unsere Entwicklungs-Roadmap</h2>
+        <p className="text-lg text-stone-700 leading-relaxed mb-6">
+          Chronotech ist ein lebendiges Projekt, das ständig weiterentwickelt wird. Hier siehst du, woran wir gerade arbeiten und was als Nächstes geplant ist. Deine Ideen und Feedback sind immer willkommen!
+        </p>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Aktuelle Entwicklung */}
+          <div className="bg-blue-50 border border-blue-200 p-6 rounded-lg shadow-sm">
+            <h3 className="text-xl font-semibold text-blue-800 mb-3">🚀 Aktuelle Entwicklung</h3>
+            <ul className="list-disc list-inside text-stone-700 space-y-2">
+              <li>Verbesserte URL-Validierung für Video- und Simulations-Einbettungen (Server-seitig)</li>
+              <li>Sicherere Simulationslogik (Entfernung der direkten Code-Ausführung)</li>
+              <li>Implementierung eines vollständigen Revisionssystems für Artikel</li>
+              <li>Syntax-Highlighting für Code-Blöcke in Artikeln</li>
+              <li>Fehlerbehebung und Stabilitätsverbesserungen</li>
+            </ul>
+          </div>
+
+          {/* Geplante Features */}
+          <div className="bg-emerald-50 border border-emerald-200 p-6 rounded-lg shadow-sm">
+            <h3 className="text-xl font-semibold text-emerald-800 mb-3">💡 Geplante Features</h3>
+            <ul className="list-disc list-inside text-stone-700 space-y-2">
+              <li>**Vorschau-Funktion** für alte Artikel-Revisionen</li>
+              <li>**Rollback-Funktion:** Alte Artikelversionen wiederherstellen</li>
+              <li>**Benutzerprofile:** Erweiterte Profilseiten für Autoren</li>
+              <li>**Benachrichtigungssystem:** Toasts für Aktionen (Speichern, Löschen etc.)</li>
+              <li>**Erweiterte Suche & Filter:** Nach Themen, Autoren, Datum filtern</li>
+              <li>**Interaktive Diagramme/Visualisierungen:** Sichere Einbettungsmöglichkeiten</li>
+            </ul>
+          </div>
         </div>
-      </main>
+
+        <p className="text-sm text-stone-500 mt-8 text-center">
+          Hast du eine Idee oder möchtest du mithelfen? Kontaktiere uns!
+        </p>
+      </section>
     </div>
   );
 }
