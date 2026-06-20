@@ -32,7 +32,7 @@ export default function LoginPage() {
         // Falls richtig, return zu Home
         window.location.href = result.url;
       }
-    } catch (error) {
+    } catch {
       setErrorMessage("Ein unerwarteter Fehler ist aufgetreten.");
     } finally {
       setIsLoading(false);

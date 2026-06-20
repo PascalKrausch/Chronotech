@@ -39,8 +39,8 @@ model ArticleRevision {
   author      User     @relation(fields: [authorId], references: [id])
   title       String
   content     Json
-  searchText  String @db.Text
-  status      String   @default("PENDING") // PENDING, APPROVED, REJECTED
+  searchText  String? @db.Text
+  status      String   @default("PENDING") // PENDING, APPROVED, REJECTED, SUPERSEDED
   createdAt   DateTime @default(now())
 }
 

@@ -3,7 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
 import Navbar from "./components/navbar";
-import Footer from "./components/Footer"; // Importiere den neuen Footer
+import Footer from "./components/Footer";
+import Providers from "./provider";
 import { Toaster } from "sonner";
 
 const geistSans = Geist({
@@ -17,7 +18,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Chrontech",
+  title: "ChronoTech",
   description: "Plattform für Technikgeschichte",
 };
 
@@ -32,17 +33,15 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-stone-800">
+        <Providers>
+          <Navbar />
 
-        <Navbar />
+          <main className="flex-1 bg-stone-800">{children}</main>
 
-        <main className="flex-1 bg-stone-800">
-          {children}
-        </main>
+          <Footer />
 
-        <Footer /> {/* Füge den Footer hier ein */}
-
-        <Toaster richColors position="top-right" />
-
+          <Toaster richColors position="top-right" />
+        </Providers>
       </body>
     </html>
   );

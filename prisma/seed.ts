@@ -1,7 +1,10 @@
 import "dotenv/config";
 import { Pool } from "pg";
 import { PrismaPg } from "@prisma/adapter-pg";
-import {PrismaClient} from './generated/client/client';
+import { PrismaClient, Prisma } from "./generated/client/client";
+import bcrypt from "bcrypt";
+import { extractSearchText } from "../lib/article-utils";
+import type { Content } from "../lib/types";
 
 const connectionString = `${process.env.DATABASE_URL}`;
 const pool = new Pool({ connectionString });
@@ -14,27 +17,48 @@ async function main() {
   await prisma.article.deleteMany({});
   await prisma.user.deleteMany({});
 
-  // 2. Einen Test-User anlegen
+  const hashedPassword = await bcrypt.hash("bobbobbob", 10);
+
   const admin = await prisma.user.create({
     data: {
       username: "Thomas Newcomen",
       email: "thomasnewcomen@steammaschine.de",
       role: "ADMIN",
-      password: "bobbobbob"
+      password: hashedPassword,
     },
   });
 
-  // 3. Einen ersten Artikel inkl. einer freigegebenen Revision anlegen
   const article = await prisma.article.create({});
+
+  const content: Content = {
+    Article: [
+      {
+        type: "TextAbschnitt",
+        content:
+          "Die atmosphärische Dampfmaschine von Thomas Newcomen war die erste funktionierende Dampfmaschine und markierte den Beginn der industriellen Revolution.",
+      },
+      {
+        type: "SubHeader",
+        content: "Funktionsweise",
+      },
+      {
+        type: "TextAbschnitt",
+        content:
+          "Newcomens Maschine nutzte atmosphärischen Druck, um einen Kolben nach unten zu bewegen und Wasser aus Minen zu pumpen.",
+      },
+    ],
+  };
+
+  const title = "Die Newcomen-Dampfmaschine (1712)";
 
   await prisma.articleRevision.create({
     data: {
       articleId: article.id,
       authorId: admin.id,
-      title: "Die Newcomen-Dampfmaschine (1712)",
-      content: "Die atmosphärische Dampfmaschine von Thomas Newcomen war die erste funktionierende ...",
+      title,
+      content: content as unknown as Prisma.InputJsonValue,
+      searchText: extractSearchText(title, content),
       status: "APPROVED",
-      
     },
   });
 

@@ -1,44 +1,27 @@
-
 import { prisma } from "@/lib/prisma";
 import { auth } from "../../../auth";
 import { notFound, redirect } from "next/navigation";
-import { revalidatePath } from "next/cache";
-import type {Content,} from "@/lib/types";
-import ArticleEditor from "../../../components/ArticleEditor"
-import { updateArticle } from "@/app/actions/articles";
+import type { Content } from "@/lib/types";
+import ArticleEditor from "../../../components/ArticleEditor";
 
-
-export default async function EditArticlePage({ params }: { params: Promise<{ id: string }> }) {
+export default async function EditArticlePage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
   const { id } = await params;
   const session = await auth();
 
   const revision = await prisma.articleRevision.findFirst({
     where: { articleId: id, status: "APPROVED" },
-    include: { author: true }
+    include: { author: true },
   });
 
-  if (!revision) {notFound();}
-
-  // wenn user nicht autor ist, auf home umleiten
-  if (session?.user?.id !== revision.authorId) {
-    redirect(`/articles/${id}`);
+  if (!revision) {
+    notFound();
   }
 
-  async function updateArticle(formData: FormData) {
-    "use server";
-    const title = formData.get("title") as string;
-    const content = formData.get("content") as string;
-
-    if (!title || !content) throw new Error("Felder dürfen nicht leer sein.");
-
-    // Revision updaten 
-    await prisma.articleRevision.updateMany({
-      where: { articleId:id },
-      data: { title, content }
-    });
-
-    revalidatePath(`/articles/${id}`);
-    revalidatePath("/");
+  if (session?.user?.id !== revision.authorId) {
     redirect(`/articles/${id}`);
   }
 
@@ -47,11 +30,11 @@ export default async function EditArticlePage({ params }: { params: Promise<{ id
       <h1 className="">✏️ Artikel bearbeiten</h1>
 
       <ArticleEditor
-      initialTitle={revision.title}
-      initialContent={revision.content as Content}
-      mode="edit"
-      articleId={id}
-    />
-  </div>
-);
+        initialTitle={revision.title}
+        initialContent={revision.content as Content}
+        mode="edit"
+        articleId={id}
+      />
+    </div>
+  );
 }

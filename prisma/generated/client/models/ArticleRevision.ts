@@ -29,6 +29,7 @@ export type ArticleRevisionMinAggregateOutputType = {
   articleId: string | null
   authorId: string | null
   title: string | null
+  searchText: string | null
   status: string | null
   createdAt: Date | null
 }
@@ -38,6 +39,7 @@ export type ArticleRevisionMaxAggregateOutputType = {
   articleId: string | null
   authorId: string | null
   title: string | null
+  searchText: string | null
   status: string | null
   createdAt: Date | null
 }
@@ -48,6 +50,7 @@ export type ArticleRevisionCountAggregateOutputType = {
   authorId: number
   title: number
   content: number
+  searchText: number
   status: number
   createdAt: number
   _all: number
@@ -59,6 +62,7 @@ export type ArticleRevisionMinAggregateInputType = {
   articleId?: true
   authorId?: true
   title?: true
+  searchText?: true
   status?: true
   createdAt?: true
 }
@@ -68,6 +72,7 @@ export type ArticleRevisionMaxAggregateInputType = {
   articleId?: true
   authorId?: true
   title?: true
+  searchText?: true
   status?: true
   createdAt?: true
 }
@@ -78,6 +83,7 @@ export type ArticleRevisionCountAggregateInputType = {
   authorId?: true
   title?: true
   content?: true
+  searchText?: true
   status?: true
   createdAt?: true
   _all?: true
@@ -161,6 +167,7 @@ export type ArticleRevisionGroupByOutputType = {
   authorId: string
   title: string
   content: runtime.JsonValue
+  searchText: string
   status: string
   createdAt: Date
   _count: ArticleRevisionCountAggregateOutputType | null
@@ -192,6 +199,7 @@ export type ArticleRevisionWhereInput = {
   authorId?: Prisma.StringFilter<"ArticleRevision"> | string
   title?: Prisma.StringFilter<"ArticleRevision"> | string
   content?: Prisma.JsonFilter<"ArticleRevision">
+  searchText?: Prisma.StringFilter<"ArticleRevision"> | string
   status?: Prisma.StringFilter<"ArticleRevision"> | string
   createdAt?: Prisma.DateTimeFilter<"ArticleRevision"> | Date | string
   article?: Prisma.XOR<Prisma.ArticleScalarRelationFilter, Prisma.ArticleWhereInput>
@@ -204,6 +212,7 @@ export type ArticleRevisionOrderByWithRelationInput = {
   authorId?: Prisma.SortOrder
   title?: Prisma.SortOrder
   content?: Prisma.SortOrder
+  searchText?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   article?: Prisma.ArticleOrderByWithRelationInput
@@ -219,6 +228,7 @@ export type ArticleRevisionWhereUniqueInput = Prisma.AtLeast<{
   authorId?: Prisma.StringFilter<"ArticleRevision"> | string
   title?: Prisma.StringFilter<"ArticleRevision"> | string
   content?: Prisma.JsonFilter<"ArticleRevision">
+  searchText?: Prisma.StringFilter<"ArticleRevision"> | string
   status?: Prisma.StringFilter<"ArticleRevision"> | string
   createdAt?: Prisma.DateTimeFilter<"ArticleRevision"> | Date | string
   article?: Prisma.XOR<Prisma.ArticleScalarRelationFilter, Prisma.ArticleWhereInput>
@@ -231,6 +241,7 @@ export type ArticleRevisionOrderByWithAggregationInput = {
   authorId?: Prisma.SortOrder
   title?: Prisma.SortOrder
   content?: Prisma.SortOrder
+  searchText?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.ArticleRevisionCountOrderByAggregateInput
@@ -247,6 +258,7 @@ export type ArticleRevisionScalarWhereWithAggregatesInput = {
   authorId?: Prisma.StringWithAggregatesFilter<"ArticleRevision"> | string
   title?: Prisma.StringWithAggregatesFilter<"ArticleRevision"> | string
   content?: Prisma.JsonWithAggregatesFilter<"ArticleRevision">
+  searchText?: Prisma.StringWithAggregatesFilter<"ArticleRevision"> | string
   status?: Prisma.StringWithAggregatesFilter<"ArticleRevision"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"ArticleRevision"> | Date | string
 }
@@ -255,6 +267,7 @@ export type ArticleRevisionCreateInput = {
   id?: string
   title: string
   content: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  searchText: string
   status?: string
   createdAt?: Date | string
   article: Prisma.ArticleCreateNestedOneWithoutRevisionsInput
@@ -267,6 +280,7 @@ export type ArticleRevisionUncheckedCreateInput = {
   authorId: string
   title: string
   content: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  searchText: string
   status?: string
   createdAt?: Date | string
 }
@@ -275,6 +289,7 @@ export type ArticleRevisionUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  searchText?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   article?: Prisma.ArticleUpdateOneRequiredWithoutRevisionsNestedInput
@@ -287,6 +302,7 @@ export type ArticleRevisionUncheckedUpdateInput = {
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  searchText?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -297,6 +313,7 @@ export type ArticleRevisionCreateManyInput = {
   authorId: string
   title: string
   content: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  searchText: string
   status?: string
   createdAt?: Date | string
 }
@@ -305,6 +322,7 @@ export type ArticleRevisionUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  searchText?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -315,6 +333,7 @@ export type ArticleRevisionUncheckedUpdateManyInput = {
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  searchText?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -335,6 +354,7 @@ export type ArticleRevisionCountOrderByAggregateInput = {
   authorId?: Prisma.SortOrder
   title?: Prisma.SortOrder
   content?: Prisma.SortOrder
+  searchText?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
@@ -344,6 +364,7 @@ export type ArticleRevisionMaxOrderByAggregateInput = {
   articleId?: Prisma.SortOrder
   authorId?: Prisma.SortOrder
   title?: Prisma.SortOrder
+  searchText?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
@@ -353,6 +374,7 @@ export type ArticleRevisionMinOrderByAggregateInput = {
   articleId?: Prisma.SortOrder
   authorId?: Prisma.SortOrder
   title?: Prisma.SortOrder
+  searchText?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
@@ -445,6 +467,7 @@ export type ArticleRevisionCreateWithoutAuthorInput = {
   id?: string
   title: string
   content: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  searchText: string
   status?: string
   createdAt?: Date | string
   article: Prisma.ArticleCreateNestedOneWithoutRevisionsInput
@@ -455,6 +478,7 @@ export type ArticleRevisionUncheckedCreateWithoutAuthorInput = {
   articleId: string
   title: string
   content: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  searchText: string
   status?: string
   createdAt?: Date | string
 }
@@ -494,6 +518,7 @@ export type ArticleRevisionScalarWhereInput = {
   authorId?: Prisma.StringFilter<"ArticleRevision"> | string
   title?: Prisma.StringFilter<"ArticleRevision"> | string
   content?: Prisma.JsonFilter<"ArticleRevision">
+  searchText?: Prisma.StringFilter<"ArticleRevision"> | string
   status?: Prisma.StringFilter<"ArticleRevision"> | string
   createdAt?: Prisma.DateTimeFilter<"ArticleRevision"> | Date | string
 }
@@ -502,6 +527,7 @@ export type ArticleRevisionCreateWithoutArticleInput = {
   id?: string
   title: string
   content: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  searchText: string
   status?: string
   createdAt?: Date | string
   author: Prisma.UserCreateNestedOneWithoutRevisionsInput
@@ -512,6 +538,7 @@ export type ArticleRevisionUncheckedCreateWithoutArticleInput = {
   authorId: string
   title: string
   content: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  searchText: string
   status?: string
   createdAt?: Date | string
 }
@@ -547,6 +574,7 @@ export type ArticleRevisionCreateManyAuthorInput = {
   articleId: string
   title: string
   content: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  searchText: string
   status?: string
   createdAt?: Date | string
 }
@@ -555,6 +583,7 @@ export type ArticleRevisionUpdateWithoutAuthorInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  searchText?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   article?: Prisma.ArticleUpdateOneRequiredWithoutRevisionsNestedInput
@@ -565,6 +594,7 @@ export type ArticleRevisionUncheckedUpdateWithoutAuthorInput = {
   articleId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  searchText?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -574,6 +604,7 @@ export type ArticleRevisionUncheckedUpdateManyWithoutAuthorInput = {
   articleId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  searchText?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -583,6 +614,7 @@ export type ArticleRevisionCreateManyArticleInput = {
   authorId: string
   title: string
   content: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  searchText: string
   status?: string
   createdAt?: Date | string
 }
@@ -591,6 +623,7 @@ export type ArticleRevisionUpdateWithoutArticleInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  searchText?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   author?: Prisma.UserUpdateOneRequiredWithoutRevisionsNestedInput
@@ -601,6 +634,7 @@ export type ArticleRevisionUncheckedUpdateWithoutArticleInput = {
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  searchText?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -610,6 +644,7 @@ export type ArticleRevisionUncheckedUpdateManyWithoutArticleInput = {
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  searchText?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -622,6 +657,7 @@ export type ArticleRevisionSelect<ExtArgs extends runtime.Types.Extensions.Inter
   authorId?: boolean
   title?: boolean
   content?: boolean
+  searchText?: boolean
   status?: boolean
   createdAt?: boolean
   article?: boolean | Prisma.ArticleDefaultArgs<ExtArgs>
@@ -634,6 +670,7 @@ export type ArticleRevisionSelectCreateManyAndReturn<ExtArgs extends runtime.Typ
   authorId?: boolean
   title?: boolean
   content?: boolean
+  searchText?: boolean
   status?: boolean
   createdAt?: boolean
   article?: boolean | Prisma.ArticleDefaultArgs<ExtArgs>
@@ -646,6 +683,7 @@ export type ArticleRevisionSelectUpdateManyAndReturn<ExtArgs extends runtime.Typ
   authorId?: boolean
   title?: boolean
   content?: boolean
+  searchText?: boolean
   status?: boolean
   createdAt?: boolean
   article?: boolean | Prisma.ArticleDefaultArgs<ExtArgs>
@@ -658,11 +696,12 @@ export type ArticleRevisionSelectScalar = {
   authorId?: boolean
   title?: boolean
   content?: boolean
+  searchText?: boolean
   status?: boolean
   createdAt?: boolean
 }
 
-export type ArticleRevisionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "articleId" | "authorId" | "title" | "content" | "status" | "createdAt", ExtArgs["result"]["articleRevision"]>
+export type ArticleRevisionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "articleId" | "authorId" | "title" | "content" | "searchText" | "status" | "createdAt", ExtArgs["result"]["articleRevision"]>
 export type ArticleRevisionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   article?: boolean | Prisma.ArticleDefaultArgs<ExtArgs>
   author?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -688,6 +727,7 @@ export type $ArticleRevisionPayload<ExtArgs extends runtime.Types.Extensions.Int
     authorId: string
     title: string
     content: runtime.JsonValue
+    searchText: string
     status: string
     createdAt: Date
   }, ExtArgs["result"]["articleRevision"]>
@@ -1120,6 +1160,7 @@ export interface ArticleRevisionFieldRefs {
   readonly authorId: Prisma.FieldRef<"ArticleRevision", 'String'>
   readonly title: Prisma.FieldRef<"ArticleRevision", 'String'>
   readonly content: Prisma.FieldRef<"ArticleRevision", 'Json'>
+  readonly searchText: Prisma.FieldRef<"ArticleRevision", 'String'>
   readonly status: Prisma.FieldRef<"ArticleRevision", 'String'>
   readonly createdAt: Prisma.FieldRef<"ArticleRevision", 'DateTime'>
 }

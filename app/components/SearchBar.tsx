@@ -1,24 +1,8 @@
-import Link from "next/link"
-import Button from "../components/ui/Button";
-
-type Topic = {
-  name: string
-  value: string
-}
-
-type Props = {
-  search?: string
-  topic?: string
-  topics: Topic[]
-}
+import Button from "./ui/Button";
 
 export default function SearchBar() {
   return (
-    <form 
-      method="GET"
-      action="/articles"
-      className="flex gap-2,"
-    >
+    <form method="GET" action="/articles" className="flex gap-2">
       <input
         type="text"
         name="search"
@@ -26,10 +10,7 @@ export default function SearchBar() {
         className="w-full border rounded-md px-3 py-2 bg-white"
       />
 
-      <Button
-        type="submit">
-        Suche
-      </Button>
+      <Button type="submit">Suche</Button>
     </form>
-  )
+  );
 }

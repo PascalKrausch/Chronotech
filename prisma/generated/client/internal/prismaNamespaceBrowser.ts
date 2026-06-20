@@ -99,6 +99,7 @@ export const ArticleRevisionScalarFieldEnum = {
   authorId: 'authorId',
   title: 'title',
   content: 'content',
+  searchText: 'searchText',
   status: 'status',
   createdAt: 'createdAt'
 } as const

@@ -1,38 +1,49 @@
-'use server'
+"use server";
 
 import { prisma } from "@/lib/prisma";
+import { extractSearchText } from "@/lib/article-utils";
+import { REVISION_STATUS, type Content } from "@/lib/types";
+import { Prisma } from "@/prisma/generated/client/client";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { auth } from "../auth"; 
-import type {Content} from "../../lib/types"
+import { auth } from "../auth";
 
-// Erlaubte Domains für externe Inhalte
 const ALLOWED_DOMAINS = [
   "youtube.com",
   "youtu.be",
   "streamlit.app",
   "vercel.app",
-  "github.io"
+  "github.io",
 ];
 
 function isValidUrl(urlString: string) {
   try {
     const url = new URL(urlString);
-    return url.protocol === "https:" && ALLOWED_DOMAINS.some(domain => url.hostname.endsWith(domain));
+    return (
+      url.protocol === "https:" &&
+      ALLOWED_DOMAINS.some((domain) => url.hostname.endsWith(domain))
+    );
   } catch {
     return false;
   }
 }
 
-export async function createArticle({ title, contentState }: { title: string; contentState: Content }) {
-  
-  // Validierung
+function toJsonContent(contentState: Content): Prisma.InputJsonValue {
+  return contentState as unknown as Prisma.InputJsonValue;
+}
+
+export async function createArticle({
+  title,
+  contentState,
+}: {
+  title: string;
+  contentState: Content;
+}) {
   if (!title || !contentState) {
     throw new Error("Titel und Inhalt sind erforderlich.");
   }
 
-  // URL Validierung für Video und Simulation
-  contentState.Article.forEach(block => {
+  contentState.Article.forEach((block) => {
     if ((block.type === "Video" || block.type === "Simulation") && block.url) {
       if (!isValidUrl(block.url)) {
         throw new Error(`Ungültige oder nicht erlaubte URL: ${block.url}`);
@@ -47,25 +58,25 @@ export async function createArticle({ title, contentState }: { title: string; co
     throw new Error("Nicht eingeloggt oder Sitzung abgelaufen.");
   }
 
-  // Artikel in der DB anlegen
-  
   const newArticle = await prisma.article.create({
-    data: {} 
+    data: {},
   });
 
   await prisma.articleRevision.create({
     data: {
       articleId: newArticle.id,
-      authorId: authorId,
-      title: title,
-      content: contentState as any,
-      status: "APPROVED", 
-    }
+      authorId,
+      title,
+      content: toJsonContent(contentState),
+      searchText: extractSearchText(title, contentState),
+      status: REVISION_STATUS.APPROVED,
+    },
   });
+
   revalidatePath("/");
-  
+
   return {
-  success: true,
+    success: true,
   };
 }
 
@@ -76,7 +87,7 @@ export async function deleteArticle(articleId: string) {
   if (!userId) throw new Error("Nicht eingeloggt");
 
   const firstRevision = await prisma.articleRevision.findFirst({
-    where: { articleId: articleId, status: "APPROVED" }
+    where: { articleId, status: REVISION_STATUS.APPROVED },
   });
 
   if (!firstRevision) throw new Error("Artikel nicht gefunden");
@@ -89,7 +100,7 @@ export async function deleteArticle(articleId: string) {
   await prisma.comment.deleteMany({ where: { articleId } });
 
   await prisma.article.delete({
-    where: { id: articleId }
+    where: { id: articleId },
   });
 
   revalidatePath("/");
@@ -115,7 +126,7 @@ export async function updateArticle({
   const revision = await prisma.articleRevision.findFirst({
     where: {
       articleId,
-      status: "APPROVED",
+      status: REVISION_STATUS.APPROVED,
     },
   });
 
@@ -127,8 +138,7 @@ export async function updateArticle({
     throw new Error("Keine Berechtigung");
   }
 
-  // URL Validierung für Video und Simulation
-  contentState.Article.forEach(block => {
+  contentState.Article.forEach((block) => {
     if ((block.type === "Video" || block.type === "Simulation") && block.url) {
       if (!isValidUrl(block.url)) {
         throw new Error(`Ungültige oder nicht erlaubte URL: ${block.url}`);
@@ -136,27 +146,25 @@ export async function updateArticle({
     }
   });
 
-  // 1. Alle bisherigen "APPROVED" Revisionen dieses Artikels archivieren
-  // (Normalerweise sollte es nur eine geben, aber updateMany ist hier sicher)
   await prisma.articleRevision.updateMany({
-    where: { 
-      articleId, 
-      status: "APPROVED" 
+    where: {
+      articleId,
+      status: REVISION_STATUS.APPROVED,
     },
     data: {
-      status: "SUPERSEDED" as any, // Status auf "überholt" setzen
-    }
+      status: REVISION_STATUS.SUPERSEDED,
+    },
   });
 
-  // 2. Eine neue Revision mit dem aktuellen Stand erstellen
   await prisma.articleRevision.create({
     data: {
       articleId,
-      authorId: userId, // Der User, der die Änderung vorgenommen hat
+      authorId: userId,
       title,
-      content: contentState as any,
-      status: "APPROVED",
-    }
+      content: toJsonContent(contentState),
+      searchText: extractSearchText(title, contentState),
+      status: REVISION_STATUS.APPROVED,
+    },
   });
 
   revalidatePath("/");

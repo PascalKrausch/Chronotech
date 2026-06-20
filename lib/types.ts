@@ -1,30 +1,30 @@
 export type TextAbschnitt = {
-    type: "TextAbschnitt";
-    content: string;
-}
+  type: "TextAbschnitt";
+  content: string;
+};
 
 export type SubHeader = {
-    type: "SubHeader";
-    content: string;
-}
+  type: "SubHeader";
+  content: string;
+};
 
 export type Image = {
-    type: "Image";
-    src: string;
-    alt: string;
-    caption?: string;
-}
+  type: "Image";
+  src: string;
+  alt: string;
+  caption?: string;
+};
 
 export type Video = {
-    type: "Video";
-    url: string;
-}
+  type: "Video";
+  url: string;
+};
 
 export type Quote = {
-    type : "Quote"
-    content: string;
-    author?: string;
-}
+  type: "Quote";
+  content: string;
+  author?: string;
+};
 
 export type CodeBlock = {
   type: "CodeBlock";
@@ -33,11 +33,47 @@ export type CodeBlock = {
 };
 
 export type Simulation = {
-    type : "Simulation";
-    url: string;
+  type: "Simulation";
+  url: string;
 };
 
+export type EntireArticle =
+  | TextAbschnitt
+  | SubHeader
+  | Image
+  | Video
+  | Quote
+  | CodeBlock
+  | Simulation;
 
-export type EntireArticle = TextAbschnitt | SubHeader | Image |Video | Quote | CodeBlock | Simulation
+export type Content = { Article: EntireArticle[] };
 
-export type Content = {Article : EntireArticle[]}
+export const REVISION_STATUS = {
+  PENDING: "PENDING",
+  APPROVED: "APPROVED",
+  REJECTED: "REJECTED",
+  SUPERSEDED: "SUPERSEDED",
+} as const;
+
+export type RevisionStatus =
+  (typeof REVISION_STATUS)[keyof typeof REVISION_STATUS];
+
+export type ArticleRevisionWithAuthor = {
+  articleId: string;
+  title: string;
+  createdAt: Date;
+  content: Content;
+  author: {
+    username: string;
+  };
+};
+
+export type CommentWithUser = {
+  id: string;
+  userId: string;
+  content: string;
+  createdAt: Date;
+  user: {
+    username: string;
+  };
+};

@@ -1,38 +1,20 @@
 import Link from "next/link";
-import type { Content } from "@/lib/types";
-
-type Revision = {
-  articleId: string;
-  title: string;
-  createdAt: Date;
-  content: Content;
-  author: {
-    username: string;
-  };
-};
+import { blockPreviewText } from "@/lib/article-utils";
+import type { ArticleRevisionWithAuthor } from "@/lib/types";
 
 type Props = {
-  revision: Revision;
+  revision: ArticleRevisionWithAuthor;
 };
 
-
-
-export default function ArticleCard({
-  revision,
-}: Props) {
-
+export default function ArticleCard({ revision }: Props) {
   const preview =
-  revision.content?.Article
-    ?.map((block: any) => block.content)
-    .join(" ")
-    .slice(0, 200) ?? "";
+    revision.content?.Article?.map(blockPreviewText).join(" ").slice(0, 200) ??
+    "";
+
   return (
     <article className="p-6 bg-white rounded-lg border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
-
       <h3 className="text-2xl font-bold text-zinc-500 hover:underline">
-        <Link href={`/articles/${revision.articleId}`}>
-          {revision.title}
-        </Link>
+        <Link href={`/articles/${revision.articleId}`}>{revision.title}</Link>
       </h3>
 
       <p className="text-xs text-slate-600 mt-1">
@@ -44,9 +26,7 @@ export default function ArticleCard({
         {new Date(revision.createdAt).toLocaleDateString("de-DE")}
       </p>
 
-      <p className="text-slate-600 mt-4 line-clamp-3">
-        {preview}
-      </p>
+      <p className="text-slate-600 mt-4 line-clamp-3">{preview}</p>
     </article>
   );
 }
