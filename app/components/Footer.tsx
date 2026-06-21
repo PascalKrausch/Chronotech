@@ -16,9 +16,6 @@ export default function Footer() {
 
         {/* Navigationslinks */}
         <div className="flex flex-wrap justify-center md:justify-end gap-x-8 gap-y-2 text-sm">
-          <Link href="/" className="hover:text-cyan-100 transition-colors">Startseite</Link>
-          <Link href="/articles" className="hover:text-cyan-100 transition-colors">Artikel</Link>
-          <Link href="/articles/new" className="hover:text-cyan-100 transition-colors">Artikel schreiben</Link>
           <Link href="/datenschutz" className="hover:text-cyan-100 transition-colors">Datenschutz</Link>
           <Link href="/impressum" className="hover:text-cyan-100 transition-colors">Impressum</Link>
         </div>

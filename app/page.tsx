@@ -25,9 +25,6 @@ export default function HomePage() {
           und neue Perspektiven.
         </p>
         <div className="mt-6 flex gap-4">
-          <Link href="/articles/new">
-            <Button>Artikel schreiben</Button>
-          </Link>
           <Link href="/articles">
             <Button variant="primary">Alle Artikel ansehen</Button>
           </Link>
