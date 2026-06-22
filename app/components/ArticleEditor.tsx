@@ -135,60 +135,73 @@ export default function ArticleEditor({
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div className="flex flex-col gap-2 mb-4">
-        <label className="font-semibold">Titel</label>
-
+    <form onSubmit={handleSubmit} className="max-w-4xl mx-auto p-4">
+      {/* Titel-Eingabe */}
+      <div className="flex flex-col gap-2 mb-6">
+        <label className="font-semibold text-lg">Titel</label>
         <input
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="Titel eingeben..."
-          className="w-full p-3 border rounded"
+          className="w-full p-3 border rounded text-xl font-medium"
         />
       </div>
 
-      <div className="mt-6 relative">
-        <Button type="button" onClick={() => setShowMenu(!showMenu)}>
-          + Hinzufügen
-        </Button>
-
-        {showMenu && (
-          <div className="absolute z-10 mt-2 bg-white border rounded shadow-md min-w-[220px]">
-            {blockTypes.map((block) => (
-              <button
-                key={block.type}
-                type="button"
-                className="block w-full text-left px-4 py-2 hover:bg-stone-100"
-                onClick={() => {
-                  addSection(block.type);
-                  setShowMenu(false);
-                }}
-              >
-                {block.label}
-              </button>
-            ))}
+      {/* Liste der Abschnitte */}
+      <div className="space-y-6">
+        {sections.map((item, index) => (
+          <div key={index} className="border p-4 rounded-lg bg-white shadow-sm relative group">
+            <ArticleBlockEditor
+              block={item}
+              index={index}
+              onUpdate={updateContent}
+            />
+            <div className="mt-2 flex justify-end">
+              <Button type="button" onClick={() => deleteSection(index)} className="text-red-500 bg-red-50 hover:bg-red-100">
+                🗑️ Block löschen
+              </Button>
+            </div>
           </div>
+        ))}
+      </div>
+
+      {/* Dynamischer Hinzufügen-Bereich (Jetzt unten) */}
+      <div className="mt-8 mb-12 p-4 border-2 border-dashed border-stone-200 rounded-lg flex flex-col items-center justify-center bg-stone-50/50">
+        <div className="relative">
+          <Button type="button" onClick={() => setShowMenu(!showMenu)}>
+            ➕ Block hinzufügen
+          </Button>
+
+          {showMenu && (
+            <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 z-10 bg-white border rounded shadow-xl min-w-[220px]">
+              {blockTypes.map((block) => (
+                <button
+                  key={block.type}
+                  type="button"
+                  className="block w-full text-left px-4 py-2.5 hover:bg-stone-100 text-sm transition-colors"
+                  onClick={() => {
+                    addSection(block.type);
+                    setShowMenu(false);
+                  }}
+                >
+                  {block.label}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+        {sections.length === 0 && (
+          <p className="text-stone-400 text-sm mt-2">Dein Artikel ist noch leer. Füge einen Block hinzu!</p>
         )}
       </div>
 
-      {sections.map((item, index) => (
-        <div key={index} className="my-4">
-          <ArticleBlockEditor
-            block={item}
-            index={index}
-            onUpdate={updateContent}
-          />
-
-          <Button type="button" onClick={() => deleteSection(index)}>
-            -Löschen
-          </Button>
-        </div>
-      ))}
-
-      <Button type="submit" disabled={isSaving}>
-        {isSaving ? "Speichert..." : "+Speichern"}
-      </Button>
+      {/* Fester Footer für das Speichern */}
+      <div className="border-t pt-4 flex justify-end">
+        <Button type="submit" disabled={isSaving} className="w-full sm:w-auto px-6 py-3 bg-blue-600 text-white font-semibold">
+          {isSaving ? "Speichert..." : "💾 Artikel speichern"}
+        </Button>
+      </div>
     </form>
   );
 }
