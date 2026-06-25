@@ -22,7 +22,7 @@ const blockTypes = [
   { type: "Image", label: "🖼️ Bild" },
   { type: "Video", label: "🎥 Video" },
   { type: "CodeBlock", label: "💻 Codeblock" },
-  { type: "Simulation", label: "📈 Simulation" },
+  
 ] as const;
 
 export default function ArticleEditor({
@@ -61,9 +61,7 @@ export default function ArticleEditor({
       case "CodeBlock":
         block = { type, language: "typescript", code: "" };
         break;
-      case "Simulation":
-        block = { type: "Simulation", url: "" };
-        break;
+      
     }
 
     setSections((prev) => [...prev, block]);

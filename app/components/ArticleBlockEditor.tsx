@@ -146,28 +146,7 @@ export default function ArticleBlockEditor({ block, index, onUpdate }: Props) {
         </div>
       );
 
-    case "Simulation":
-      return (
-        <div className="flex flex-col gap-3 p-4 border rounded-lg bg-stone-50 border-stone-200">
-          <div className="flex items-center justify-between border-b border-stone-200 pb-2">
-            <span className="text-sm font-semibold text-stone-700">
-              📈 Simulation (Externe App)
-            </span>
-          </div>
-          <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-medium text-stone-500">
-              Externer Link zur App (Vercel, Streamlit Cloud, etc.)
-            </label>
-            <input
-              type="text"
-              value={block.url || ""}
-              placeholder="https://deine-app.vercel.app"
-              className="w-full p-3 border rounded text-sm bg-white"
-              onChange={(e) => onUpdate(index, { url: e.target.value })}
-            />
-          </div>
-        </div>
-      );
+    
 
     default:
       return null;
