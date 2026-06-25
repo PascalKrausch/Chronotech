@@ -47,19 +47,13 @@ export default function HomePage() {
               🚀 Aktuelle Entwicklung
             </h3>
             <ul className="list-disc list-inside text-stone-700 space-y-2">
-              <li>
-                Verbesserte URL-Validierung für Video- und
-                Simulations-Einbettungen (Server-seitig)
-              </li>
-              <li>
-                Sicherere Simulationslogik (Entfernung der direkten
-                Code-Ausführung)
-              </li>
+              <li>Verbesserung der Artikel-Editor-Benutzeroberfläche</li>
               <li>
                 Implementierung eines vollständigen Revisionssystems für Artikel
               </li>
               <li>Syntax-Highlighting für Code-Blöcke in Artikeln</li>
-              <li>Fehlerbehebung und Stabilitätsverbesserungen</li>
+              <li>Implementieren von Fehlermeldungen und Feedback</li>
+              <li> Bessere Such- und Filtermöglichkeiten</li>
             </ul>
           </div>
 
@@ -68,20 +62,20 @@ export default function HomePage() {
               💡 Geplante Features
             </h3>
             <ul className="list-disc list-inside text-stone-700 space-y-2">
+
               <li>Vorschau-Funktion für alte Artikel-Revisionen</li>
               <li>Rollback-Funktion: Alte Artikelversionen wiederherstellen</li>
-              <li>Benutzerprofile: Erweiterte Profilseiten für Autoren</li>
+              
               <li>
                 Benachrichtigungssystem: Toasts für Aktionen (Speichern, Löschen
                 etc.)
               </li>
               <li>
-                Erweiterte Suche & Filter: Nach Themen, Autoren, Datum filtern
+                Bilder und Videos via Upload integrieren
               </li>
-              <li>
-                Interaktive Diagramme/Visualisierungen: Sichere
-                Einbettungsmöglichkeiten
-              </li>
+              
+              <li> Erweiterung des Block-Editors um Diagramme und technische Zeichnungen </li>
+              <li> Entwicklung eines Simulations-Editors zur Visualisierung zeitabhängiger Prozesse </li>
             </ul>
           </div>
         </div>
