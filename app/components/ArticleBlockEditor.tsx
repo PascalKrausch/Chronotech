@@ -1,4 +1,8 @@
+'use client'
 import type { EntireArticle } from "@/lib/types";
+import { useState } from "react";
+import { uploadMedia } from "@/lib/supabase-upload";
+import { toast } from "sonner";
 
 type Props = {
   block: EntireArticle;
@@ -43,9 +47,40 @@ export default function ArticleBlockEditor({ block, index, onUpdate }: Props) {
       );
 
     case "Image":
+      const [uploading, setUploading] = useState(false);
+
+      const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        try {
+          setUploading(true);
+          const publicUrl = await uploadMedia(file);
+          onUpdate(index, { src: publicUrl });
+          toast.success("Bild erfolgreich hochgeladen!");
+        } catch (error: any) {
+          toast.error(error.message || "Fehler beim Bild-Upload");
+        } finally {
+          setUploading(false);
+        }
+      };
       return (
         <div className="flex flex-col gap-2 p-4 border rounded-lg bg-stone-50 border-stone-200">
           <span className="text-sm font-semibold text-stone-700">🖼️ Bild</span>
+          {/* Datei Upload Feld */}
+          <div className="flex flex-col gap-1">
+            <label className="text-xs text-stone-500 font-medium">Datei hochladen:</label>
+            <input
+              type="file"
+              accept="image/*"
+              disabled={uploading}
+              className="text-sm text-stone-600 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 disabled:opacity-50"
+              onChange={handleFileChange}
+            />
+            {uploading && <span className="text-xs text-blue-500 animate-pulse">Lädt hoch...</span>}
+          </div>
+
+          <div className="text-xs text-stone-400 text-center my-1">— ODER —</div>
           <input
             type="url"
             value={block.src}

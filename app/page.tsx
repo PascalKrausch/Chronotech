@@ -54,6 +54,7 @@ export default function HomePage() {
               <li>Syntax-Highlighting für Code-Blöcke in Artikeln</li>
               <li>Implementieren von Fehlermeldungen und Feedback</li>
               <li> Bessere Such- und Filtermöglichkeiten</li>
+              <li> Temporäre Entfernung der Auswahlmöglichkeit "Simulation" aus dem Artikel-Editor aufgrund von mangelhafter Qualität</li>
             </ul>
           </div>
 
