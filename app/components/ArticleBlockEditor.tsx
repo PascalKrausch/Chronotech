@@ -1,4 +1,4 @@
-'use client'
+"use client"
 import type { EntireArticle } from "@/lib/types";
 import { useState } from "react";
 import { uploadMedia } from "@/lib/supabase-upload";
@@ -19,6 +19,7 @@ function youtubeToEmbed(url: string) {
 }
 
 export default function ArticleBlockEditor({ block, index, onUpdate }: Props) {
+  const [uploading, setUploading] = useState(false);
   switch (block.type) {
     case "SubHeader":
       return (
@@ -47,7 +48,7 @@ export default function ArticleBlockEditor({ block, index, onUpdate }: Props) {
       );
 
     case "Image":
-      const [uploading, setUploading] = useState(false);
+      
 
       const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];

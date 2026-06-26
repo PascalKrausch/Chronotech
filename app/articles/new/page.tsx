@@ -1,7 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import ArticleEditor from "../../components/ArticleEditor";
+import dynamic from "next/dynamic";
+
+// Der Editor wird dynamisch geladen und vom Server-Side-Rendering / Prerendering ausgeschlossen
+const ArticleEditor = dynamic(
+  () => import("../../components/ArticleEditor"),
+  { ssr: false }
+);
 
 export default function NewArticlePage() {
   return (
