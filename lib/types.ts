@@ -32,10 +32,26 @@ export type CodeBlock = {
   code: string;
 };
 
+export type Table = {
+  type: "Table";
+  rows: string[][];
+  headers: string[];
+}
+
+export type Diagram = {
+  type: "Diagram";
+  chartType: ChartType;
+  title?: string;
+  labels: string[];
+  series: DiagramSeries[];
+};
+
 export type Simulation = {
   type: "Simulation";
   url: string;
 };
+
+
 
 export type EntireArticle =
   | TextAbschnitt
@@ -44,7 +60,9 @@ export type EntireArticle =
   | Video
   | Quote
   | CodeBlock
-  | Simulation;
+  | Simulation
+  | Table
+  | Diagram;
 
 export type Content = { Article: EntireArticle[] };
 
@@ -76,4 +94,11 @@ export type CommentWithUser = {
   user: {
     username: string;
   };
+};
+
+export type ChartType = "line" | "bar" | "pie";
+
+export type DiagramSeries = {
+  name: string;
+  values: number[];
 };

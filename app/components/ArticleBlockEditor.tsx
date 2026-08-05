@@ -2,6 +2,11 @@
 import type { EntireArticle } from "@/lib/types";
 import { useState } from "react";
 import { uploadMedia } from "@/lib/supabase-upload";
+import { validateTable, fixTable } from "@/lib/table-validation";
+import { validateDiagram, fixDiagram } from "@/lib/diagram-validation";
+import TableValidationWarnings from "./TableValidationWarnings";
+import DiagramValidationWarnings from "./DiagramValidationWarnings";
+import DiagramChart from "./DiagramChart";
 import { toast } from "sonner";
 
 type Props = {
@@ -181,6 +186,239 @@ export default function ArticleBlockEditor({ block, index, onUpdate }: Props) {
           />
         </div>
       );
+
+      case "Table":
+        const addRow = () => {
+          const newRow = Array(block.headers.length).fill("");
+          const rows = [...block.rows, newRow];
+          onUpdate(index, { rows });
+        };
+
+        const removeRow = (rowIndex: number) => {
+          const rows = block.rows.filter((_, i) => i !== rowIndex);
+          onUpdate(index, { rows });
+        };
+
+        const addColumn = () => {
+          const headers = [...block.headers, `Spalte ${block.headers.length + 1}`];
+          const rows = block.rows.map((row) => [...row, ""]);
+          onUpdate(index, { headers, rows });
+        };
+
+        const removeColumn = (colIndex: number) => {
+          const headers = block.headers.filter((_, i) => i !== colIndex);
+          const rows = block.rows.map((row) =>
+            row.filter((_, i) => i !== colIndex)
+          );
+          onUpdate(index, { headers, rows });
+        };
+
+        return (
+          <div className="flex flex-col gap-4 p-4 border rounded-lg bg-stone-50 border-stone-200">
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-semibold text-stone-700">📊 Tabelle</span>
+              <div className="flex gap-2">
+                <button
+                  onClick={addColumn}
+                  className="px-2 py-1 text-xs bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 rounded transition-colors"
+                  title="Spalte hinzufügen"
+                >
+                  + Spalte
+                </button>
+                <button
+                  onClick={addRow}
+                  className="px-2 py-1 text-xs bg-green-50 hover:bg-green-100 text-green-700 border border-green-200 rounded transition-colors"
+                  title="Zeile hinzufügen"
+                >
+                  + Zeile
+                </button>
+              </div>
+            </div>
+
+            <div className="overflow-x-auto border rounded-lg">
+              <table className="w-full border-collapse bg-white">
+                <thead>
+                  <tr className="bg-stone-100">
+                    {block.headers.map((header, col) => (
+                      <th key={col} className="border border-stone-300 p-2 relative group">
+                        <div className="flex gap-1">
+                          <input
+                            value={header}
+                            onChange={(e) => {
+                              const headers = [...block.headers];
+                              headers[col] = e.target.value;
+                              onUpdate(index, { headers });
+                            }}
+                            placeholder="Spalten-Name"
+                            className="w-full px-2 py-1 border border-stone-200 rounded text-sm font-semibold text-stone-700 bg-white focus:ring-1 focus:ring-blue-400 outline-hidden"
+                          />
+                          {block.headers.length > 1 && (
+                            <button
+                              onClick={() => removeColumn(col)}
+                              className="px-1.5 py-1 text-xs bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 rounded opacity-0 group-hover:opacity-100 transition-all flex-shrink-0"
+                              title="Spalte löschen"
+                            >
+                              ✕
+                            </button>
+                          )}
+                        </div>
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {block.rows.map((row, r) => (
+                    <tr key={r} className="hover:bg-stone-50 transition-colors group">
+                      {row.map((cell, c) => (
+                        <td key={c} className="border border-stone-300 p-2">
+                          <input
+                            value={cell}
+                            onChange={(e) => {
+                              const rows = [...block.rows];
+                              rows[r][c] = e.target.value;
+                              onUpdate(index, { rows });
+                            }}
+                            placeholder="Wert eingeben"
+                            className="w-full px-2 py-1 border border-stone-200 rounded text-sm text-stone-700 bg-white focus:ring-1 focus:ring-blue-400 outline-hidden"
+                          />
+                        </td>
+                      ))}
+                      <td className="bg-stone-100 p-2 border border-stone-300 border-l-0">
+                        {block.rows.length > 1 && (
+                          <button
+                            onClick={() => removeRow(r)}
+                            className="px-2 py-1 text-xs bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 rounded transition-colors w-full"
+                            title="Zeile löschen"
+                          >
+                            Löschen
+                          </button>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <div className="text-xs text-stone-500 p-2 bg-white rounded border border-stone-200">
+              <p>💡 Zeilen: {block.rows.length} | Spalten: {block.headers.length}</p>
+            </div>
+
+            {block.type === "Table" && (
+              <TableValidationWarnings
+                errors={validateTable(block)}
+                onAutoFix={() => onUpdate(index, fixTable(block))}
+              />
+            )}
+          </div>
+        );
+
+      case "Diagram":
+        return (
+          <div className="flex flex-col gap-4 p-4 border rounded-lg bg-stone-50 border-stone-200">
+            <span className="text-sm font-semibold text-stone-700">📈 Diagramm</span>
+
+            {/* Eingabe-Felder */}
+            <div className="space-y-3">
+              <input
+                type="text"
+                value={block.title || ""}
+                placeholder="Diagrammtitel (optional)"
+                className="w-full p-3 border rounded text-sm bg-white focus:ring-1 focus:ring-blue-400 outline-hidden"
+                onChange={(e) => onUpdate(index, { title: e.target.value })}
+              />
+
+              <select
+                value={block.chartType}
+                onChange={(e) =>
+                  onUpdate(index, {
+                    chartType: e.target.value as "line" | "bar" | "pie",
+                  })
+                }
+                className="w-full text-sm p-3 border rounded bg-white text-stone-700 focus:ring-1 focus:ring-blue-400 outline-hidden"
+              >
+                <option value="line">📊 Linien-Diagramm</option>
+                <option value="bar">📊 Balken-Diagramm</option>
+                <option value="pie">🥧 Kreis-Diagramm</option>
+              </select>
+
+              <div>
+                <label className="text-xs font-medium text-stone-600 mb-1 block">
+                  Labels (Komma-getrennt)
+                </label>
+                <textarea
+                  value={block.labels.join(", ")}
+                  rows={2}
+                  placeholder="z.B: Q1, Q2, Q3, Q4"
+                  className="w-full p-3 border rounded text-sm bg-white focus:ring-1 focus:ring-blue-400 outline-hidden"
+                  onChange={(e) =>
+                    onUpdate(index, {
+                      labels: e.target.value
+                        .split(",")
+                        .map((l) => l.trim())
+                        .filter((l) => l),
+                    })
+                  }
+                />
+              </div>
+
+              <div>
+                <label className="text-xs font-medium text-stone-600 mb-1 block">
+                  Datenreihen (Format: Name:Wert1,Wert2,Wert3...)
+                </label>
+                <textarea
+                  value={block.series
+                    .map((s) => `${s.name}:${s.values.join(",")}`)
+                    .join("\n")}
+                  rows={4}
+                  placeholder="Beispiel:&#10;Umsatz:100,150,200,250&#10;Kosten:50,75,100,120"
+                  className="w-full p-3 border rounded text-sm bg-white font-mono text-xs focus:ring-1 focus:ring-blue-400 outline-hidden"
+                  onChange={(e) => {
+                    const series = e.target.value
+                      .split("\n")
+                      .filter((line) => line.trim())
+                      .map((line) => {
+                        const [name, values] = line.split(":");
+                        return {
+                          name: name.trim(),
+                          values: values
+                            ? values
+                                .split(",")
+                                .map((v) => parseFloat(v.trim()))
+                                .filter((v) => !isNaN(v))
+                            : [],
+                        };
+                      });
+                    onUpdate(index, { series });
+                  }}
+                />
+                <p className="text-xs text-stone-500 mt-1">
+                  💡 Jede Zeile = eine Datenserien. Trenne Werte mit Kommas.
+                </p>
+              </div>
+            </div>
+
+            {/* Validierung */}
+            {block.type === "Diagram" && (
+              <DiagramValidationWarnings
+                errors={validateDiagram(block)}
+                onAutoFix={() => onUpdate(index, fixDiagram(block))}
+              />
+            )}
+
+            {/* Live Preview */}
+            {block.labels.length > 0 && block.series.length > 0 && (
+              <div className="border rounded-lg bg-white p-4">
+                <p className="text-xs font-medium text-stone-600 mb-2">
+                  📊 Vorschau:
+                </p>
+                <div className="overflow-x-auto" style={{ height: 200 }}>
+                  <DiagramChart block={block} />
+                </div>
+              </div>
+            )}
+          </div>
+        );
 
     
 

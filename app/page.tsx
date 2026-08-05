@@ -52,7 +52,10 @@ export default function HomePage() {
                 Implementierung eines vollständigen Revisionssystems für Artikel
               </li>
               <li>Syntax-Highlighting für Code-Blöcke in Artikeln</li>
-              <li>Implementieren von Fehlermeldungen und Feedback</li>
+             <li>
+                Benachrichtigungssystem: Toasts für Aktionen (Speichern, Löschen
+                etc.)
+              </li>
               <li> Bessere Such- und Filtermöglichkeiten</li>
               <li> Temporäre Entfernung der Auswahlmöglichkeit "Simulation" aus dem Artikel-Editor aufgrund von mangelhafter Qualität</li>
             </ul>
@@ -67,13 +70,7 @@ export default function HomePage() {
               <li>Vorschau-Funktion für alte Artikel-Revisionen</li>
               <li>Rollback-Funktion: Alte Artikelversionen wiederherstellen</li>
               
-              <li>
-                Benachrichtigungssystem: Toasts für Aktionen (Speichern, Löschen
-                etc.)
-              </li>
-              <li>
-                Bilder und Videos via Upload integrieren
-              </li>
+      
               
               <li> Erweiterung des Block-Editors um Diagramme und technische Zeichnungen </li>
               <li> Entwicklung eines Simulations-Editors zur Visualisierung zeitabhängiger Prozesse </li>

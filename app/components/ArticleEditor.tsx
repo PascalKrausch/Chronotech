@@ -22,7 +22,8 @@ const blockTypes = [
   { type: "Image", label: "🖼️ Bild" },
   { type: "Video", label: "🎥 Video" },
   { type: "CodeBlock", label: "💻 Codeblock" },
-  
+  { type: "Table", label: "📊 Tabelle" },
+  { type: "Diagram", label: "📈 Diagramm" }
 ] as const;
 
 export default function ArticleEditor({
@@ -61,6 +62,18 @@ export default function ArticleEditor({
       case "CodeBlock":
         block = { type, language: "typescript", code: "" };
         break;
+      case "Table":
+        block = { type,  headers: ["Spalte 1", "Spalte 2"],
+    rows: [
+      ["", ""],
+      ["", ""],
+    ],};
+        break;
+      case "Diagram":
+        block = { type, chartType: "line", labels: [], series: [] };
+        break;
+      default:
+        throw new Error(`Unbekannter Blocktyp: ${type}`);
       
     }
 

@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import type { EntireArticle } from "@/lib/types";
 import Prism from "prismjs";
+import DiagramChart from "./DiagramChart";
 
 import "prismjs/themes/prism-tomorrow.css";
 import "prismjs/components/prism-typescript";
@@ -101,50 +102,44 @@ export default function ArticleBlock({ block }: Props) {
         </div>
       );
 
-    case "Simulation": {
-      if (!block.url) {
-        return (
-          <div className="my-6 p-4 text-center text-red-600 bg-red-50 border border-red-200 rounded-xl">
-            <p className="font-semibold">
-              Fehler: Keine Simulations-URL angegeben.
-            </p>
-            <p className="text-sm">
-              Bitte bearbeite den Artikel und füge einen gültigen Link ein.
-            </p>
-          </div>
-        );
-      }
-
-      const targetUrl =
-        block.url.includes("streamlit.app") &&
-        !block.url.includes("embed=true")
-          ? `${block.url}${block.url.includes("?") ? "&" : "?"}embed=true`
-          : block.url;
-
+    case "Table":
       return (
-        <div className="my-6 border rounded-xl overflow-hidden shadow-sm bg-stone-50 border-stone-200">
-          <div className="bg-stone-100 px-4 py-2 text-xs font-mono text-stone-500 border-b border-stone-200 flex justify-between items-center">
-            <span>📈 Eingebettete App-Simulation</span>
-            <a
-              href={block.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-600 hover:underline font-medium text-[11px]"
-            >
-              In neuem Tab öffnen ↗
-            </a>
-          </div>
-          <iframe
-            src={targetUrl}
-            className="w-full h-[550px] bg-white"
-            sandbox="allow-scripts allow-same-origin allow-forms"
-            allowFullScreen
-            title="External App Simulation"
-          />
+        <div className="overflow-x-auto my-6">
+          <table className="w-full border-collapse border border-stone-300 shadow-sm">
+            <thead>
+              <tr className="bg-stone-100">
+                {block.headers.map((header, index) => (
+                  <th
+                    key={index}
+                    className="border border-stone-300 px-4 py-3 text-left font-semibold text-stone-800 bg-gradient-to-b from-stone-100 to-stone-50"
+                  >
+                    {header}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {block.rows.map((row, rowIndex) => (
+                <tr key={rowIndex} className={rowIndex % 2 === 0 ? "bg-white" : "bg-stone-50"}>
+                  {row.map((cell, cellIndex) => (
+                    <td
+                      key={cellIndex}
+                      className="border border-stone-300 px-4 py-3 text-stone-700"
+                    >
+                      {cell}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       );
-    }
 
+    case "Diagram":
+      return <DiagramChart block={block} />;
+
+    
     default:
       return null;
   }
