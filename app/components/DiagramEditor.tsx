@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 
-// Hilfstypen für deine Block-Struktur
 type Series = { name: string; values: number[] };
 type DiagramBlock = {
   type: "Diagram";
