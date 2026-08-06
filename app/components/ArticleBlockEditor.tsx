@@ -7,6 +7,7 @@ import { validateDiagram, fixDiagram } from "@/lib/diagram-validation";
 import TableValidationWarnings from "./TableValidationWarnings";
 import DiagramValidationWarnings from "./DiagramValidationWarnings";
 import DiagramChart from "./DiagramChart";
+import {DiagramEditor} from "./DiagramEditor";
 import { toast } from "sonner";
 
 type Props = {
@@ -314,113 +315,28 @@ export default function ArticleBlockEditor({ block, index, onUpdate }: Props) {
         );
 
       case "Diagram":
-        return (
-          <div className="flex flex-col gap-4 p-4 border rounded-lg bg-stone-50 border-stone-200">
-            <span className="text-sm font-semibold text-stone-700">📈 Diagramm</span>
+  return (
+    <div className="flex flex-col gap-4 p-4 border rounded-lg bg-stone-50 border-stone-200">
+      
+      <DiagramEditor block={block} index={index} onUpdate={onUpdate} />
 
-            {/* Eingabe-Felder */}
-            <div className="space-y-3">
-              <input
-                type="text"
-                value={block.title || ""}
-                placeholder="Diagrammtitel (optional)"
-                className="w-full p-3 border rounded text-sm bg-white focus:ring-1 focus:ring-blue-400 outline-hidden"
-                onChange={(e) => onUpdate(index, { title: e.target.value })}
-              />
+      <DiagramValidationWarnings
+        errors={validateDiagram(block)}
+        onAutoFix={() => onUpdate(index, fixDiagram(block))}
+      />
 
-              <select
-                value={block.chartType}
-                onChange={(e) =>
-                  onUpdate(index, {
-                    chartType: e.target.value as "line" | "bar" | "pie",
-                  })
-                }
-                className="w-full text-sm p-3 border rounded bg-white text-stone-700 focus:ring-1 focus:ring-blue-400 outline-hidden"
-              >
-                <option value="line">📊 Linien-Diagramm</option>
-                <option value="bar">📊 Balken-Diagramm</option>
-                <option value="pie">🥧 Kreis-Diagramm</option>
-              </select>
-
-              <div>
-                <label className="text-xs font-medium text-stone-600 mb-1 block">
-                  Labels (Komma-getrennt)
-                </label>
-                <textarea
-                  value={block.labels.join(", ")}
-                  rows={2}
-                  placeholder="z.B: Q1, Q2, Q3, Q4"
-                  className="w-full p-3 border rounded text-sm bg-white focus:ring-1 focus:ring-blue-400 outline-hidden"
-                  onChange={(e) =>
-                    onUpdate(index, {
-                      labels: e.target.value
-                        .split(",")
-                        .map((l) => l.trim())
-                        .filter((l) => l),
-                    })
-                  }
-                />
-              </div>
-
-              <div>
-                <label className="text-xs font-medium text-stone-600 mb-1 block">
-                  Datenreihen (Format: Name:Wert1,Wert2,Wert3...)
-                </label>
-                <textarea
-                  value={block.series
-                    .map((s) => `${s.name}:${s.values.join(",")}`)
-                    .join("\n")}
-                  rows={4}
-                  placeholder="Beispiel:&#10;Umsatz:100,150,200,250&#10;Kosten:50,75,100,120"
-                  className="w-full p-3 border rounded text-sm bg-white font-mono text-xs focus:ring-1 focus:ring-blue-400 outline-hidden"
-                  onChange={(e) => {
-                    const series = e.target.value
-                      .split("\n")
-                      .filter((line) => line.trim())
-                      .map((line) => {
-                        const [name, values] = line.split(":");
-                        return {
-                          name: name.trim(),
-                          values: values
-                            ? values
-                                .split(",")
-                                .map((v) => parseFloat(v.trim()))
-                                .filter((v) => !isNaN(v))
-                            : [],
-                        };
-                      });
-                    onUpdate(index, { series });
-                  }}
-                />
-                <p className="text-xs text-stone-500 mt-1">
-                  💡 Jede Zeile = eine Datenserien. Trenne Werte mit Kommas.
-                </p>
-              </div>
-            </div>
-
-            {/* Validierung */}
-            {block.type === "Diagram" && (
-              <DiagramValidationWarnings
-                errors={validateDiagram(block)}
-                onAutoFix={() => onUpdate(index, fixDiagram(block))}
-              />
-            )}
-
-            {/* Live Preview */}
-            {block.labels.length > 0 && block.series.length > 0 && (
-              <div className="border rounded-lg bg-white p-4">
-                <p className="text-xs font-medium text-stone-600 mb-2">
-                  📊 Vorschau:
-                </p>
-                <div className="overflow-x-auto" style={{ height: 200 }}>
-                  <DiagramChart block={block} />
-                </div>
-              </div>
-            )}
+      {block.labels.length > 0 && block.series.length > 0 && (
+        <div className="border rounded-lg bg-white p-4">
+          <p className="text-xs font-medium text-stone-600 mb-2">
+            📊 Vorschau:
+          </p>
+          <div className="overflow-x-auto" style={{ height: 200 }}>
+            <DiagramChart block={block} />
           </div>
-        );
-
-    
+        </div>
+      )}
+    </div>
+  );
 
     default:
       return null;
