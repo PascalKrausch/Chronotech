@@ -41,23 +41,29 @@ export default function HomePage() {
           geplant ist. Deine Ideen und Feedback sind immer willkommen!
         </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="bg-green-50 border border-green-200 p-6 rounded-lg shadow-sm">
+            <h3 className="text-xl font-semibold text-green-800 mb-3">
+              ✅ Abgeschlossen
+            </h3>
+            <ul className="list-disc list-inside text-stone-700 space-y-2">
+              <li>Artikel-Editor mit Block-System</li>
+              <li>Revisionssystem mit Versionshistorie</li>
+              <li>Benachrichtigungssystem (Toasts)</li>
+              <li>Such- und Filterfunktion für Artikel</li>
+              <li>Bild-Upload in Artikeln</li>
+              <li>Tabellen-Editor mit Validierung</li>
+              <li>Diagramm-Editor mit interaktiven Charts und Validierung</li>
+            </ul>
+          </div>
+
           <div className="bg-blue-50 border border-blue-200 p-6 rounded-lg shadow-sm">
             <h3 className="text-xl font-semibold text-blue-800 mb-3">
               🚀 Aktuelle Entwicklung
             </h3>
             <ul className="list-disc list-inside text-stone-700 space-y-2">
-              <li>Verbesserung der Artikel-Editor-Benutzeroberfläche</li>
-              <li>
-                Implementierung eines vollständigen Revisionssystems für Artikel
-              </li>
-              <li>Syntax-Highlighting für Code-Blöcke in Artikeln</li>
-             <li>
-                Benachrichtigungssystem: Toasts für Aktionen (Speichern, Löschen
-                etc.)
-              </li>
-              <li> Bessere Such- und Filtermöglichkeiten</li>
-              <li> Temporäre Entfernung der Auswahlmöglichkeit "Simulation" aus dem Artikel-Editor aufgrund von mangelhafter Qualität</li>
+              <li>Verfeinerung und Bugfixes am Diagramm-Editor</li>
+              <li>Verbesserung der Tabellenbearbeitung</li>
             </ul>
           </div>
 
@@ -66,14 +72,8 @@ export default function HomePage() {
               💡 Geplante Features
             </h3>
             <ul className="list-disc list-inside text-stone-700 space-y-2">
-
-              <li>Vorschau-Funktion für alte Artikel-Revisionen</li>
               <li>Rollback-Funktion: Alte Artikelversionen wiederherstellen</li>
-              
-      
-              
-              <li> Erweiterung des Block-Editors um Diagramme und technische Zeichnungen </li>
-              <li> Entwicklung eines Simulations-Editors zur Visualisierung zeitabhängiger Prozesse </li>
+              <li>Simulations-Editor zur Visualisierung zeitabhängiger Prozesse</li>
             </ul>
           </div>
         </div>
