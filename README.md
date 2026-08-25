@@ -10,7 +10,7 @@ ChronoTech ist eine moderne, interaktive Community-Plattform für Technikbegeist
 ## 🎯 Features
 
 - **📝 Artikel-Management**: Erstelle, bearbeite und verwalte technische Artikel
-- **📚 Revisionssystem**: Vollständige Versionskontrolle für alle Artikel
+- **📚 Revisionssystem**: Versionshistorie und Wiederherstellung alter Artikelversionen
 - **💬 Kommentare & Diskussionen**: Interaktive Diskussionen unter Artikeln
 - **👥 Benutzerkonten**: Sichere Authentifizierung mit NextAuth.js
 - **🎨 Moderner Editor**: Blockbasierter Editor für strukturierte Inhalte
@@ -21,7 +21,7 @@ ChronoTech ist eine moderne, interaktive Community-Plattform für Technikbegeist
 ## 🚀 Aktuelle Entwicklung
 
 - Verbesserung der Artikel-Editor-Benutzeroberfläche
-- Implementierung eines vollständigen Revisionssystems
+- Pflege und Verfeinerung des Revisionssystems
 - Syntax-Highlighting für Code-Blöcke
 - Benachrichtigungssystem (Toasts für Aktionen)
 - Bessere Such- und Filtermöglichkeiten
@@ -29,9 +29,8 @@ ChronoTech ist eine moderne, interaktive Community-Plattform für Technikbegeist
 ## 💡 Geplante Features
 
 - Vorschau-Funktion für alte Artikel-Revisionen
-- Rollback-Funktion zum Wiederherstellen alter Versionen
 - Erweiterung um Diagramme und technische Zeichnungen
-- Simulations-Editor zur Visualisierung zeitabhängiger Prozesse
+- Der geplante Simulations-Editor wird als eigenständiges zukünftiges Projekt ausgelagert
 
 ## 🛠️ Tech-Stack
 
@@ -161,5 +160,4 @@ npm run test
 - [Prisma ORM](https://www.prisma.io/docs/)
 - [Tailwind CSS](https://tailwindcss.com/docs)
 - [NextAuth.js](https://next-auth.js.org/)
-
 

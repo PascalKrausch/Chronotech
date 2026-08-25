@@ -1,5 +1,8 @@
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
+import { auth } from "@/app/auth";
+import { rollbackArticle } from "@/app/actions/articles";
+import Button from "@/app/components/ui/Button";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -7,6 +10,7 @@ interface Props {
 
 export default async function HistoryPage({ params }: Props) {
   const { id } = await params;
+  const session = await auth();
 
   const revisions = await prisma.articleRevision.findMany({
     where: { articleId: id },
@@ -27,6 +31,9 @@ export default async function HistoryPage({ params }: Props) {
       </div>
     );
   }
+
+  const currentRevision = revisions.find((revision) => revision.status === "APPROVED");
+  const canRollback = session?.user?.id === currentRevision?.authorId;
 
   return (
     <div className="max-w-4xl mx-auto p-8 bg-stone-50 min-h-screen text-stone-900">
@@ -88,6 +95,14 @@ export default async function HistoryPage({ params }: Props) {
                 ID: {rev.id.slice(0, 8)}...
               </div>
             </div>
+
+            {canRollback && rev.status === "SUPERSEDED" && (
+              <form action={rollbackArticle.bind(null, id, rev.id)} className="mt-4">
+                <Button type="submit" variant="danger">
+                  Diese Version wiederherstellen
+                </Button>
+              </form>
+            )}
           </div>
         ))}
       </div>

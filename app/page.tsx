@@ -54,6 +54,7 @@ export default function HomePage() {
               <li>Bild-Upload in Artikeln</li>
               <li>Tabellen-Editor mit Validierung</li>
               <li>Diagramm-Editor mit interaktiven Charts und Validierung</li>
+              <li>Rollback: Alte Artikelversionen wiederherstellen</li>
             </ul>
           </div>
 
@@ -72,8 +73,10 @@ export default function HomePage() {
               💡 Geplante Features
             </h3>
             <ul className="list-disc list-inside text-stone-700 space-y-2">
-              <li>Rollback-Funktion: Alte Artikelversionen wiederherstellen</li>
-              <li>Simulations-Editor zur Visualisierung zeitabhängiger Prozesse</li>
+              <li>
+                Der geplante Simulations-Editor wird als eigenständiges,
+                zukünftiges Projekt ausgelagert.
+              </li>
             </ul>
           </div>
         </div>

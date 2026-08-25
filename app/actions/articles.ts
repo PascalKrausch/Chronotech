@@ -123,21 +123,6 @@ export async function updateArticle({
     throw new Error("Nicht eingeloggt");
   }
 
-  const revision = await prisma.articleRevision.findFirst({
-    where: {
-      articleId,
-      status: REVISION_STATUS.APPROVED,
-    },
-  });
-
-  if (!revision) {
-    throw new Error("Artikel nicht gefunden");
-  }
-
-  if (revision.authorId !== userId) {
-    throw new Error("Keine Berechtigung");
-  }
-
   contentState.Article.forEach((block) => {
     if ((block.type === "Video" || block.type === "Simulation") && block.url) {
       if (!isValidUrl(block.url)) {
@@ -146,32 +131,122 @@ export async function updateArticle({
     }
   });
 
-  await prisma.articleRevision.updateMany({
-    where: {
-      articleId,
-      status: REVISION_STATUS.APPROVED,
-    },
-    data: {
-      status: REVISION_STATUS.SUPERSEDED,
-    },
-  });
+  await prisma.$transaction(async (tx) => {
+    const revision = await tx.articleRevision.findFirst({
+      where: {
+        articleId,
+        status: REVISION_STATUS.APPROVED,
+      },
+    });
 
-  await prisma.articleRevision.create({
-    data: {
-      articleId,
-      authorId: userId,
-      title,
-      content: toJsonContent(contentState),
-      searchText: extractSearchText(title, contentState),
-      status: REVISION_STATUS.APPROVED,
-    },
+    if (!revision) {
+      throw new Error("Artikel nicht gefunden");
+    }
+
+    if (revision.authorId !== userId) {
+      throw new Error("Keine Berechtigung");
+    }
+
+    const archivedRevision = await tx.articleRevision.updateMany({
+      where: {
+        id: revision.id,
+        status: REVISION_STATUS.APPROVED,
+      },
+      data: {
+        status: REVISION_STATUS.SUPERSEDED,
+      },
+    });
+
+    if (archivedRevision.count !== 1) {
+      throw new Error("Der Artikel wurde zwischenzeitlich geändert. Bitte erneut versuchen.");
+    }
+
+    await tx.articleRevision.create({
+      data: {
+        articleId,
+        authorId: userId,
+        title,
+        content: toJsonContent(contentState),
+        searchText: extractSearchText(title, contentState),
+        status: REVISION_STATUS.APPROVED,
+      },
+    });
   });
 
   revalidatePath("/");
   revalidatePath(`/articles/${articleId}`);
+  revalidatePath(`/articles/${articleId}/history`);
 
   return {
     success: true,
   };
 }
 
+export async function rollbackArticle(
+  articleId: string,
+  revisionId: string,
+): Promise<void> {
+  const session = await auth();
+  const userId = session?.user?.id;
+
+  if (!userId) {
+    throw new Error("Nicht eingeloggt");
+  }
+
+  await prisma.$transaction(async (tx) => {
+    const [currentRevision, targetRevision] = await Promise.all([
+      tx.articleRevision.findFirst({
+        where: {
+          articleId,
+          status: REVISION_STATUS.APPROVED,
+        },
+      }),
+      tx.articleRevision.findFirst({
+        where: {
+          id: revisionId,
+          articleId,
+          status: REVISION_STATUS.SUPERSEDED,
+        },
+      }),
+    ]);
+
+    if (!currentRevision || !targetRevision) {
+      throw new Error("Artikelversion nicht gefunden");
+    }
+
+    if (currentRevision.authorId !== userId) {
+      throw new Error("Keine Berechtigung");
+    }
+
+    const archivedRevision = await tx.articleRevision.updateMany({
+      where: {
+        id: currentRevision.id,
+        status: REVISION_STATUS.APPROVED,
+      },
+      data: {
+        status: REVISION_STATUS.SUPERSEDED,
+      },
+    });
+
+    if (archivedRevision.count !== 1) {
+      throw new Error("Der Artikel wurde zwischenzeitlich geändert. Bitte erneut versuchen.");
+    }
+
+    const contentState = targetRevision.content as Content;
+
+    await tx.articleRevision.create({
+      data: {
+        articleId,
+        authorId: userId,
+        title: targetRevision.title,
+        content: toJsonContent(contentState),
+        searchText: extractSearchText(targetRevision.title, contentState),
+        status: REVISION_STATUS.APPROVED,
+      },
+    });
+  });
+
+  revalidatePath("/");
+  revalidatePath(`/articles/${articleId}`);
+  revalidatePath(`/articles/${articleId}/history`);
+}
