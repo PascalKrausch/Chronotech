@@ -1,163 +1,407 @@
-# ChronoTech – Interaktives Tech-Forum
+# ChronoTech
 
-[![Node.js](https://img.shields.io/badge/Node.js-20+-green?logo=node.js)](https://nodejs.org/)
-[![Next.js](https://img.shields.io/badge/Next.js-16.2-black?logo=next.js)](https://nextjs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?logo=typescript)](https://www.typescriptlang.org/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-4-06B6D4?logo=tailwindcss)](https://tailwindcss.com/)
+Eine Full-Stack-Plattform für technisches Wissen, entwickelt mit **Next.js, React, TypeScript, Prisma und PostgreSQL**.
 
-ChronoTech ist eine moderne, interaktive Community-Plattform für Technikbegeisterte. Tauche ein in spannende Artikel zur Technikgeschichte, innovativen Projekten und der Zukunft der Technologie. Diskutiere mit Gleichgesinnten und teile dein Wissen in einer wachsenden Community.
+ChronoTech verbindet Artikelverwaltung, strukturiertes Bearbeiten von Inhalten, Versionshistorie, Authentifizierung, Diskussionen und Suchfunktionen in einer Webanwendung.
 
-## 🎯 Features
+Das Projekt wird vollständig eigenständig entwickelt – vom Datenmodell und der Backend-Logik über die Benutzeroberfläche bis hin zum Deployment.
 
-- **📝 Artikel-Management**: Erstelle, bearbeite und verwalte technische Artikel
-- **📚 Revisionssystem**: Versionshistorie und Wiederherstellung alter Artikelversionen
-- **💬 Kommentare & Diskussionen**: Interaktive Diskussionen unter Artikeln
-- **👥 Benutzerkonten**: Sichere Authentifizierung mit NextAuth.js
-- **🎨 Moderner Editor**: Blockbasierter Editor für strukturierte Inhalte
-- **📊 Code-Syntax-Highlighting**: Professionelle Darstellung von Code-Snippets
-- **🔍 Such- und Filterfunktionen**: Einfach Artikel finden
-- **📱 Responsive Design**: Optimiert für alle Geräte
+## 🚀 Live-Demo
 
-## 🚀 Aktuelle Entwicklung
+**Live:** [chronotech-steel.vercel.app](https://chronotech-steel.vercel.app)
+**Repository:** [github.com/PascalKrausch/Chronotech](https://github.com/PascalKrausch/Chronotech)
 
-- Verbesserung der Artikel-Editor-Benutzeroberfläche
-- Pflege und Verfeinerung des Revisionssystems
-- Syntax-Highlighting für Code-Blöcke
-- Benachrichtigungssystem (Toasts für Aktionen)
-- Bessere Such- und Filtermöglichkeiten
+---
 
-## 💡 Geplante Features
+## ✨ Was ist ChronoTech?
 
-- Vorschau-Funktion für alte Artikel-Revisionen
-- Erweiterung um Diagramme und technische Zeichnungen
-- Der geplante Simulations-Editor wird als eigenständiges zukünftiges Projekt ausgelagert
+ChronoTech ist als Plattform gedacht, auf der technische Inhalte erstellt, gepflegt und diskutiert werden können.
+
+Der Fokus liegt nicht nur auf der Darstellung von Artikeln, sondern auf dem vollständigen Lebenszyklus technischer Inhalte:
+
+* Artikel erstellen und bearbeiten
+* Versionshistorie verwalten
+* ältere Versionen wiederherstellen
+* Inhalte über Kommentare diskutieren
+* Benutzer authentifizieren und verwalten
+* Inhalte durchsuchen und filtern
+* technische Codebeispiele sicher und lesbar darstellen
+
+Die Anwendung befindet sich weiterhin in aktiver Entwicklung. Der Editor, der Revisions-Workflow, Benachrichtigungen sowie die Suche werden laufend weiterentwickelt.
+
+---
+
+## 🧩 Kernfunktionen
+
+### Artikelverwaltung
+
+* Technische Artikel erstellen, bearbeiten und verwalten
+* Strukturierte Inhalte als JSON
+* Artikelrevisionen mit Zuordnung zum jeweiligen Autor
+* Veröffentlichungs- und Bearbeitungsstatus von Revisionen
+
+### Revisionssystem
+
+* Permanente Versionshistorie von Artikeln
+* Frühere Versionen bleiben erhalten
+* Wiederherstellung älterer Versionen
+* Metadaten wie Autor, Status und Erstellungszeit
+
+### Authentifizierung & Benutzerkonten
+
+* Registrierung und Login
+* Authentifizierung über NextAuth.js
+* Passwort-Hashing mit bcrypt
+* JWT-basierte Sessions
+* Benutzerrollen zur Verwaltung von Berechtigungen
+
+### Diskussionen
+
+* Kommentare zu einzelnen Artikeln
+* Zuordnung von Kommentaren zu Benutzern
+* Permanente Diskussionshistorie
+
+### Strukturierter Editor
+
+* Blockbasierter Editor
+* Strukturierte JSON-Darstellung der Inhalte
+* Unterstützung für technische Inhalte und Codeblöcke
+
+### Developer Experience
+
+* Syntax-Highlighting für Code mit PrismJS
+* Suche und Filterung technischer Inhalte
+* Responsive Oberfläche für Desktop und mobile Geräte
+* Toast-Benachrichtigungen für Benutzeraktionen
+
+### Sicherheit
+
+* Passwörter werden vor der Speicherung gehasht
+* Gerenderte HTML-Inhalte werden mit DOMPurify bereinigt
+* Datenbankzugriffe laufen über Prisma
+* Anwendungsschichten für UI, API und Datenzugriff sind getrennt
+
+---
+
+## 🏗️ Architektur
+
+ChronoTech verwendet den **Next.js App Router** mit serverseitiger Anwendungslogik und API-Routen.
+
+```text
+┌──────────────────────────────────────────────┐
+│                  Frontend                    │
+│  Next.js App Router                         │
+│  React + TypeScript                         │
+│  Tailwind CSS                               │
+└───────────────────────┬──────────────────────┘
+                        │
+                        ▼
+┌──────────────────────────────────────────────┐
+│              Anwendungsschicht              │
+│  API-Routen                                  │
+│  Authentifizierung                           │
+│  Validierung & Business-Logik                │
+└───────────────────────┬──────────────────────┘
+                        │
+                        ▼
+┌──────────────────────────────────────────────┐
+│                Datenebene                   │
+│  Prisma ORM                                 │
+│  PostgreSQL                                 │
+└──────────────────────────────────────────────┘
+```
+
+### Zentrales Datenmodell
+
+Die Datenbank basiert im Kern auf vier wichtigen Entitäten:
+
+```text
+User
+ ├── ArticleRevision
+ └── Comment
+
+Article
+ ├── ArticleRevision
+ └── Comment
+```
+
+Ein Artikel wird über seine Revisionen verwaltet, statt den aktuellen Inhalt einfach zu überschreiben. Dadurch wird die Versionshistorie zu einem festen Bestandteil des Datenmodells.
+
+---
+
+## 🔧 Technische Besonderheiten
+
+### Revisionshistorie als Bestandteil der Domänenlogik
+
+Änderungen an einem Artikel überschreiben nicht einfach den bisherigen Inhalt. Stattdessen wird eine neue `ArticleRevision` angelegt.
+
+Dadurch bleiben erhalten:
+
+* frühere Artikelstände
+* Autoren der Revisionen
+* Zeitstempel
+* Statusinformationen
+* strukturierte Inhalte
+
+Dadurch können ältere Versionen wiederhergestellt werden, ohne direkt in der Datenbank Änderungen vornehmen zu müssen.
+
+### Strukturierte Speicherung von Inhalten
+
+Artikelinhalte werden als strukturiertes JSON gespeichert und nicht als undurchsichtiger Textblock.
+
+So lassen sich unterschiedliche Inhaltstypen bzw. Blöcke abbilden, während Editor und Datenhaltung voneinander getrennt bleiben.
+
+### Authentifizierung und Sicherheit
+
+Die Authentifizierung erfolgt über NextAuth.js.
+
+Passwörter werden mit bcrypt gehasht. Inhalte werden vor dem Rendern bereinigt, um potenziell gefährliches HTML nicht ungeprüft in die Anwendung zu übernehmen.
+
+Ziel ist es, Authentifizierung, Datenhaltung und Inhaltsdarstellung nicht unnötig direkt miteinander zu vermischen.
+
+### Entwicklung von Features über den gesamten Stack
+
+Features werden über die komplette Anwendung hinweg umgesetzt:
+
+```text
+Benutzeraktion
+      ↓
+React / Next.js UI
+      ↓
+API-Route
+      ↓
+Anwendungslogik
+      ↓
+Prisma
+      ↓
+PostgreSQL
+```
+
+Das Projekt zeigt damit nicht nur isolierte Frontend-Komponenten, sondern die Entwicklung vollständiger Features über mehrere Schichten hinweg.
+
+---
 
 ## 🛠️ Tech-Stack
 
 ### Frontend
-- **Next.js 16** – React-Framework mit App Router
-- **React 19** – UI-Bibliothek
-- **TypeScript** – Typsichere Entwicklung
-- **Tailwind CSS 4** – Utility-First CSS
-- **Recharts** – Datenvisualisierung
-- **Matter.js** – Physik-Simulationen
-- **PrismJS** – Code-Syntax-Highlighting
-- **DOMPurify** – HTML-Sanitierung
 
-### Backend
-- **Next.js API Routes** – Serverless Backend
-- **Prisma 7** – ORM für Datenbank-Operationen
-- **PostgreSQL** – Relationale Datenbank
-- **Supabase** – Backend-as-a-Service (optional)
+* **Next.js 16**
+* **React 19**
+* **TypeScript**
+* **Tailwind CSS 4**
+* **Recharts**
+* **Matter.js**
+* **PrismJS**
+* **DOMPurify**
+* **Sonner**
 
-### Authentifizierung & Sicherheit
-- **NextAuth.js 5** – Authentifizierung
-- **bcrypt** – Passwort-Hashing
-- **JWT** – Token-basierte Authentifizierung
+### Backend & Datenhaltung
 
-## 📦 Installation & Setup
+* **Next.js API-Routen**
+* **Prisma 7**
+* **PostgreSQL**
+* **Supabase** (optional)
 
-### Voraussetzungen
-- Node.js 20+ 
-- PostgreSQL (lokal oder via Supabase)
-- npm oder yarn
+### Authentifizierung
 
-### 1. Projekt klonen
-```bash
-git clone https://github.com/PascalKrausch/Chronotech.git
-cd interactive-techforum
+* **NextAuth.js 5**
+* **bcrypt**
+* **JWT**
+
+---
+
+## 📂 Projektstruktur
+
+```text
+Chronotech/
+├── app/
+│   ├── api/
+│   ├── articles/
+│   ├── auth/
+│   ├── components/
+│   ├── login/
+│   ├── register/
+│   └── page.tsx
+│
+├── lib/
+│   └── gemeinsame Anwendungslogik
+│
+├── prisma/
+│   └── schema.prisma
+│
+├── public/
+├── AGENTS.md
+├── CLAUDE.md
+├── docker-compose.yml
+├── package.json
+├── next.config.ts
+├── tsconfig.json
+└── README.md
 ```
 
-### 2. Dependencies installieren
+---
+
+## 🚦 Entwicklungsstand
+
+### Bereits umgesetzt
+
+* Artikelverwaltung
+* Revisionshistorie
+* Wiederherstellung von Revisionen
+* Benutzer-Authentifizierung
+* Benutzerrollen
+* Kommentare
+* Strukturierter Editor
+* Syntax-Highlighting
+* Suche und Filter
+* Responsive Oberfläche
+* Bereinigung von Inhalten
+* Datenbankanbindung
+* Produktives Deployment
+
+### Aktuell in Weiterentwicklung
+
+* Benutzeroberfläche des Artikel-Editors
+* Revisions-Workflow
+* Verarbeitung von Codeblöcken
+* Toast-basierte Benachrichtigungen
+* Suche und Filter
+
+### Geplant
+
+* Vorschau älterer Revisionen
+* Technische Diagramme und Zeichnungen
+* Weitere strukturierte Inhaltsblöcke
+* Weitere Verbesserungen des Artikel-Workflows
+
+Der geplante Simulationseditor wird als eigenständiges zukünftiges Projekt weitergeführt, damit ChronoTech auf die Verwaltung technischen Wissens fokussiert bleibt.
+
+---
+
+## ⚙️ Einrichtung
+
+### Voraussetzungen
+
+* Node.js 20+
+* PostgreSQL
+* npm
+
+### 1. Repository klonen
+
+```bash
+git clone https://github.com/PascalKrausch/Chronotech.git
+cd Chronotech
+```
+
+### 2. Abhängigkeiten installieren
+
 ```bash
 npm install
 ```
 
 ### 3. Umgebungsvariablen konfigurieren
-```bash
-cp .env.example .env.local
-```
 
-Folgende Variablen sind erforderlich:
+Eine `.env.local` im Projektverzeichnis anlegen:
+
 ```env
-# Datenbank
 DATABASE_URL=postgresql://user:password@localhost:5432/chronotech
 
-# Authentifizierung
 NEXTAUTH_URL=http://localhost:3000
 NEXTAUTH_SECRET=your-secret-key
+```
 
-# Supabase (optional)
+Bei Verwendung der optionalen Supabase-Integration zusätzlich:
+
+```env
 NEXT_PUBLIC_SUPABASE_URL=your-supabase-url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 ```
 
-### 4. Datenbank initialisieren
+### 4. Prisma Client generieren
+
 ```bash
 npx prisma generate
-npx prisma migrate dev --name init
 ```
 
-### 5. Entwicklungsserver starten
+### 5. Datenbankmigrationen anwenden
+
+```bash
+npx prisma migrate dev
+```
+
+### 6. Entwicklungsserver starten
+
 ```bash
 npm run dev
 ```
 
-Die Anwendung ist nun unter [http://localhost:3000](http://localhost:3000) erreichbar.
+Die Anwendung ist anschließend erreichbar unter:
 
-## 📂 Projektstruktur
-
-```
-├── app/                    # Next.js App Router
-│   ├── api/               # API-Routes
-│   ├── auth/              # Authentifizierung
-│   ├── articles/          # Artikel-Seiten
-│   ├── login/             # Login-Seite
-│   ├── register/          # Registrierung
-│   ├── components/        # React-Komponenten
-│   └── page.tsx           # Homepage
-├── prisma/                # Datenbank-Schema
-│   └── schema.prisma      # Prisma-Schema
-├── lib/                   # Utility-Funktionen
-├── public/                # Statische Assets
-├── node_modules/          # Dependencies
-├── package.json           # Projekt-Metadaten
-├── tsconfig.json          # TypeScript-Konfiguration
-└── tailwind.config.ts     # Tailwind-Konfiguration
+```text
+http://localhost:3000
 ```
 
-## 🚀 Production Build
+---
 
-### Build erstellen
+## 🏭 Produktion
+
+Produktions-Build erstellen:
+
 ```bash
 npm run build
 ```
 
-### Production-Server starten
+Produktionsserver starten:
+
 ```bash
 npm run start
 ```
 
-## 📝 Entwicklungs-Commands
+Das Projekt ist aktuell über Vercel deployed.
 
-| Command | Beschreibung |
-|---------|-------------|
-| `npm run dev` | Entwicklungsserver starten |
-| `npm run build` | Production-Build erstellen |
-| `npm run start` | Production-Server starten |
-| `npm run lint` | ESLint ausführen |
+---
 
-## 🧪 Testing
+## 📝 Entwicklungsbefehle
 
-Zur Durchführung von Tests verwende:
-```bash
-npm run test
-```
+| Befehl          | Zweck                       |
+| --------------- | --------------------------- |
+| `npm run dev`   | Entwicklungsserver starten  |
+| `npm run build` | Produktions-Build erstellen |
+| `npm run start` | Produktionsserver starten   |
+| `npm run lint`  | ESLint ausführen            |
 
-## 📚 Dokumentation
+---
 
-- [Next.js Dokumentation](https://nextjs.org/docs)
-- [Prisma ORM](https://www.prisma.io/docs/)
-- [Tailwind CSS](https://tailwindcss.com/docs)
-- [NextAuth.js](https://next-auth.js.org/)
+## 🤖 Entwicklungsprozess
 
+Das Repository enthält projektspezifische Entwicklungsrichtlinien in `AGENTS.md` und `CLAUDE.md`.
+
+Ziel ist es, technische Entscheidungen an der jeweils verwendeten Next.js-Version und den Konventionen des Projekts auszurichten.
+
+Bei der Entwicklung neuer Features wird die Anwendung als Gesamtsystem betrachtet: Änderungen werden über UI, API, Anwendungslogik und Datenhaltung hinweg betrachtet.
+
+---
+
+## 🎯 Warum ich das Projekt gebaut habe
+
+ChronoTech begann als praktisches Projekt, um die Entwicklung einer technischen Wissensplattform als vollständige Full-Stack-Anwendung zu untersuchen und weiterzuentwickeln.
+
+Dabei standen insbesondere folgende Themen im Fokus:
+
+* relationales Datenmodellieren
+* Authentifizierung
+* versionierte Domänendaten
+* strukturierte Editoren
+* API-Design
+* Integration von Frontend und Backend
+* sichere Darstellung von Inhalten
+* iterative Produktentwicklung
+* produktives Deployment
+
+---
+
+## 📌 Projektstatus
+
+ChronoTech ist ein eigenständiges Projekt und wird kontinuierlich weiterentwickelt.
+
+Das Repository soll nicht nur einen minimalistischen Showcase darstellen, sondern die tatsächliche Implementierung und den Entwicklungsprozess zeigen.

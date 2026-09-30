@@ -33,6 +33,7 @@ export default function DiagramValidationWarnings({
         </div>
         {onAutoFix && errorCount > 0 && (
           <button
+            type="button"
             onClick={onAutoFix}
             className="px-2 py-1 text-xs bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 rounded transition-colors"
           >

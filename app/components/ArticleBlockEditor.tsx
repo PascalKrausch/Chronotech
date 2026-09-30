@@ -220,6 +220,7 @@ export default function ArticleBlockEditor({ block, index, onUpdate }: Props) {
               <span className="text-sm font-semibold text-stone-700">📊 Tabelle</span>
               <div className="flex gap-2">
                 <button
+                  type="button"
                   onClick={addColumn}
                   className="px-2 py-1 text-xs bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 rounded transition-colors"
                   title="Spalte hinzufügen"
@@ -227,6 +228,7 @@ export default function ArticleBlockEditor({ block, index, onUpdate }: Props) {
                   + Spalte
                 </button>
                 <button
+                  type="button"
                   onClick={addRow}
                   className="px-2 py-1 text-xs bg-green-50 hover:bg-green-100 text-green-700 border border-green-200 rounded transition-colors"
                   title="Zeile hinzufügen"
@@ -327,9 +329,7 @@ export default function ArticleBlockEditor({ block, index, onUpdate }: Props) {
 
       {block.labels.length > 0 && block.series.length > 0 && (
         <div className="border rounded-lg bg-white p-4">
-          <p className="text-xs font-medium text-stone-600 mb-2">
-            📊 Vorschau:
-          </p>
+          <p className="text-xs font-medium text-stone-600 mb-2">Live-Vorschau</p>
           <div className="overflow-x-auto" style={{ height: 200 }}>
             <DiagramChart block={block} />
           </div>
