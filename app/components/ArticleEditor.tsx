@@ -23,7 +23,8 @@ const blockTypes = [
   { type: "Video", label: "🎥 Video" },
   { type: "CodeBlock", label: "💻 Codeblock" },
   { type: "Table", label: "📊 Tabelle" },
-  { type: "Diagram", label: "📈 Diagramm" }
+  { type: "Diagram", label: "📈 Diagramm" },
+  { type: "Formel", label: "🧮 Formel" }
 ] as const;
 
 export default function ArticleEditor({
@@ -71,6 +72,9 @@ export default function ArticleEditor({
         break;
       case "Diagram":
         block = { type, chartType: "line", labels: [], series: [] };
+        break;
+      case "Formel":
+        block = { type, latex: "" };
         break;
       default:
         throw new Error(`Unbekannter Blocktyp: ${type}`);

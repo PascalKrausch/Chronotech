@@ -51,6 +51,11 @@ export type Simulation = {
   url: string;
 };
 
+export type Formel = {
+  type: "Formel";
+  latex: string;
+};
+
 
 
 export type EntireArticle =
@@ -62,7 +67,8 @@ export type EntireArticle =
   | CodeBlock
   | Simulation
   | Table
-  | Diagram;
+  | Diagram
+  | Formel;
 
 export type Content = { Article: EntireArticle[] };
 

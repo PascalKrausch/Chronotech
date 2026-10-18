@@ -8,6 +8,7 @@ import TableValidationWarnings from "./TableValidationWarnings";
 import DiagramValidationWarnings from "./DiagramValidationWarnings";
 import DiagramChart from "./DiagramChart";
 import {DiagramEditor} from "./DiagramEditor";
+import FormulaEditor from "./FormulaEditor";
 import { toast } from "sonner";
 
 type Props = {
@@ -176,6 +177,11 @@ export default function ArticleBlockEditor({ block, index, onUpdate }: Props) {
               <option value="css">CSS</option>
               <option value="bash">Bash</option>
               <option value="json">JSON</option>
+              <option value="html">HTML</option>
+              <option value="java">Java</option>
+              <option value="c">C</option>
+              <option value="cpp">C++</option>
+              <option value="go">Go</option>
             </select>
           </div>
           <textarea
@@ -337,6 +343,17 @@ export default function ArticleBlockEditor({ block, index, onUpdate }: Props) {
       )}
     </div>
   );
+
+    case "Formel":
+      return (
+        <div className="flex flex-col gap-2 p-4 border rounded-lg bg-stone-50 border-stone-200">
+          <span className="text-sm font-semibold text-stone-700">🧮 Formel</span>
+          <FormulaEditor
+            latex={block.latex}
+            onChange={(latex) => onUpdate(index, { latex })}
+          />
+        </div>
+      );
 
     default:
       return null;

@@ -3,17 +3,25 @@
 import { useEffect } from "react";
 import type { EntireArticle } from "@/lib/types";
 import Prism from "prismjs";
+import katex from "katex";
+import "katex/dist/katex.min.css";
 import DiagramChart from "./DiagramChart";
 
 import "prismjs/themes/prism-tomorrow.css";
 import "prismjs/components/prism-typescript";
 import "prismjs/components/prism-javascript";
 import "prismjs/components/prism-css";
+import "prismjs/components/prism-html";
 import "prismjs/components/prism-python";
 import "prismjs/components/prism-bash";
 import "prismjs/components/prism-json";
 import "prismjs/components/prism-jsx";
 import "prismjs/components/prism-tsx";
+import "prismjs/components/prism-java";
+import "prismjs/components/prism-c";
+import "prismjs/components/prism-cpp";
+import "prismjs/components/prism-go";
+
 
 type Props = {
   block: EntireArticle;
@@ -138,6 +146,20 @@ export default function ArticleBlock({ block }: Props) {
 
     case "Diagram":
       return <DiagramChart block={block} />;
+
+    case "Formel":
+      if (!block.latex.trim()) return null;
+      return (
+        <div
+          className="my-6 overflow-x-auto text-center"
+          dangerouslySetInnerHTML={{
+            __html: katex.renderToString(block.latex, {
+              displayMode: true,
+              throwOnError: false,
+            }),
+          }}
+        />
+      );
 
     
     default:
